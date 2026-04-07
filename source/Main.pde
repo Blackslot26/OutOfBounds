@@ -75,7 +75,6 @@ PImage back;
 PImage glitch;
 PImage historia;
 PImage exit;
-PImage arrow;
 PImage lvl2;
 PImage lvl3;
 PImage lvl4;
@@ -150,7 +149,6 @@ void setup() {
   greenpath = new SoundFile(this, "greenpath.mp3");
   Music1 = new SoundFile(this, "Music1.mp3");
   boom = new SoundFile(this, "boom.mp3");
-  arrow = loadImage("arrow.png");
   lvl3 = loadImage("lvl3.png");
   lvl4 = loadImage("lvl4.png");
   lvl5 = loadImage("lvl5.png");

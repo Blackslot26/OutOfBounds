@@ -5,7 +5,7 @@
 ![Processing](https://img.shields.io/badge/Environment-Processing-blue?style=for-the-badge)
 ![Code Quality](https://img.shields.io/badge/Code_Quality-Spaghetti-red?style=for-the-badge)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Fuck_No-lightgrey?style=for-the-badge)
-![Logic](https://img.shields.io/badge/Logic-God_Knows-purple?style=for-the-badge)
+![Logic](https://img.shields.io/badge/Logic-Hopes_and_Dreams-purple?style=for-the-badge)
 
 An experimental 2D platformer where the game world is comprised of native Windows windows.
 This project was made for an assignment in first year and only God knows how it works.
@@ -57,4 +57,6 @@ This project was made for an assignment in first year and only God knows how it 
 #### __Do we plan to fix the game?__
 
 - Fuck no. This is a time capsule of our first-year suffering and it shall remain untouched for eternity.
+
+
 
