@@ -1,4 +1,4 @@
-name: Build Processing Project (Windows)
+name: Build Processing Project (Windows Native)
 
 on:
   push:
@@ -31,9 +31,11 @@ jobs:
         run: |
           $libPath = "$HOME\Documents\Processing\libraries"
           if (!(Test-Path $libPath)) { New-Item -ItemType Directory -Path $libPath -Force }
+          
           # Video
           Invoke-WebRequest -Uri https://github.com/processing/processing-video/releases/download/latest/video.zip -OutFile video.zip
           Expand-Archive -Path video.zip -DestinationPath $libPath
+          
           # Sound
           Invoke-WebRequest -Uri https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip -OutFile sound.zip
           Expand-Archive -Path sound.zip -DestinationPath $libPath
@@ -41,19 +43,25 @@ jobs:
       - name: Export Application
         shell: pwsh
         run: |
-          # Evitamos el error 'Not a directory' renombrando source
+          # 1. Renombrar carpeta 'source' para cumplir con la regla de Processing
           Rename-Item -Path "source" -NewName "OutOfBounds"
           Rename-Item -Path "OutOfBounds\source.pde" -NewName "OutOfBounds.pde"
           
-          # Exportación nativa
-          mkdir out
-          & "./processing-4.3/processing-java.exe" --sketch="$env:GITHUB_WORKSPACE\OutOfBounds" --output="$env:GITHUB_WORKSPACE\out" --force --export --variant=windows-amd64
+          # 2. Crear carpeta de salida absoluta
+          $outPath = Join-Path $env:GITHUB_WORKSPACE "out"
+          New-Item -ItemType Directory -Path $outPath -Force
           
-          # Verificación de archivos en logs
-          Get-ChildItem -Recurse out
+          # 3. Exportar usando la ruta absoluta del ejecutable de Processing
+          $procExe = Join-Path $env:GITHUB_WORKSPACE "processing-4.3\processing-java.exe"
+          $sketchPath = Join-Path $env:GITHUB_WORKSPACE "OutOfBounds"
+          
+          & $procExe --sketch="$sketchPath" --output="$outPath" --force --export --variant=windows-amd64
+          
+          # 4. DEBUG: Listar archivos para confirmar creación en los logs
+          Get-ChildItem -Path $outPath -Recurse
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: OutOfBounds-Windows-App
-          path: out/
+          path: out/ # Captura TODO lo que haya en la carpeta de salida
