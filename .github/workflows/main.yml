@@ -10,9 +10,9 @@ jobs:
           wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-x64.tgz
           tar -xzf processing-4.3-linux-x64.tgz
       - name: Build Sketch
-        run: ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE --output=$GITHUB_WORKSPACE/build --build
+        run: ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build --build
       - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
           name: Out-Of-Bounds
-          path: build/
+          path: ${{ github.workspace }}/build
