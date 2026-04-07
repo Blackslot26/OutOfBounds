@@ -1,4 +1,4 @@
-name: Build Processing Project (Windows Native)
+name: Build Processing Project (Windows)
 
 on:
   push:
@@ -25,34 +25,35 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-windows-x64.zip -OutFile processing.zip
           Expand-Archive -Path processing.zip -DestinationPath .
-          # El ejecutable queda en ./processing-4.3/processing-java.exe
 
       - name: Install Libraries
         shell: pwsh
         run: |
           $libPath = "$HOME\Documents\Processing\libraries"
           if (!(Test-Path $libPath)) { New-Item -ItemType Directory -Path $libPath -Force }
-          
-          # Video Library
+          # Video
           Invoke-WebRequest -Uri https://github.com/processing/processing-video/releases/download/latest/video.zip -OutFile video.zip
           Expand-Archive -Path video.zip -DestinationPath $libPath
-          
-          # Sound Library
+          # Sound
           Invoke-WebRequest -Uri https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip -OutFile sound.zip
           Expand-Archive -Path sound.zip -DestinationPath $libPath
 
-      - name: Export Windows App
+      - name: Export Application
         shell: pwsh
         run: |
-          # Renombramos para evitar el conflicto 'source'
+          # Evitamos el error 'Not a directory' renombrando source
           Rename-Item -Path "source" -NewName "OutOfBounds"
           Rename-Item -Path "OutOfBounds\source.pde" -NewName "OutOfBounds.pde"
           
-          # Ejecutamos la exportación nativa
+          # Exportación nativa
+          mkdir out
           & "./processing-4.3/processing-java.exe" --sketch="$env:GITHUB_WORKSPACE\OutOfBounds" --output="$env:GITHUB_WORKSPACE\out" --force --export --variant=windows-amd64
+          
+          # Verificación de archivos en logs
+          Get-ChildItem -Recurse out
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: OutOfBounds-Windows-App
-          path: out\windows-amd64\
+          path: out/
