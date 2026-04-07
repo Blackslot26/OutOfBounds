@@ -29,7 +29,6 @@ jobs:
         run: |
           wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-x64.tgz
           tar -xvzf processing-4.3-linux-x64.tgz
-          chmod +x ./processing-4.3/processing-java
 
       - name: Install Libraries
         run: |
@@ -41,13 +40,18 @@ jobs:
 
       - name: Export Application
         run: |
-          # Limpiamos cualquier residuo previo
-          rm -rf $GITHUB_WORKSPACE/build_dist
-          # Usamos xvfb-run para simular una pantalla (necesario para exportar en Linux)
-          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build_dist --force --export --variant=windows-amd64
+          # 1. Renombramos la carpeta y el archivo para evitar el conflicto 'source'
+          mv source OutOfBounds
+          mv OutOfBounds/source.pde OutOfBounds/OutOfBounds.pde
+          
+          # 2. Creamos una carpeta de salida limpia
+          mkdir -p $GITHUB_WORKSPACE/export_final
+          
+          # 3. Exportamos usando el nuevo nombre
+          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/OutOfBounds --output=$GITHUB_WORKSPACE/export_final --force --export --variant=windows-amd64
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: OutOfBounds-Windows-App
-          path: build_dist/
+          path: export_final/
