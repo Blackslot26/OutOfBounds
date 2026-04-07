@@ -20,10 +20,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libxrender1 libxtst6 libxi6
+
       - name: Install Processing 4.3
         run: |
           wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-x64.tgz
           tar -xvzf processing-4.3-linux-x64.tgz
+          chmod +x ./processing-4.3/processing-java
 
       - name: Install Libraries
         run: |
@@ -35,13 +41,13 @@ jobs:
 
       - name: Export Application
         run: |
-          # Eliminamos la carpeta out por seguridad antes de empezar
-          rm -rf $GITHUB_WORKSPACE/out
-          # Agregamos --force para que Processing gestione la creación
-          ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/out --force --export --variant=windows-amd64
+          # Limpiamos cualquier residuo previo
+          rm -rf $GITHUB_WORKSPACE/build_dist
+          # Usamos xvfb-run para simular una pantalla (necesario para exportar en Linux)
+          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build_dist --force --export --variant=windows-amd64
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: OutOfBounds-Windows-App
-          path: out/
+          path: build_dist/
