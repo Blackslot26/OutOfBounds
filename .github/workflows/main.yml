@@ -40,15 +40,11 @@ jobs:
 
       - name: Export Application
         run: |
-          # 1. Renombramos la carpeta y el archivo para evitar el conflicto 'source'
           mv source OutOfBounds
           mv OutOfBounds/source.pde OutOfBounds/OutOfBounds.pde
-          
-          # 2. Creamos una carpeta de salida limpia
           mkdir -p $GITHUB_WORKSPACE/export_final
-          
-          # 3. Exportamos usando el nuevo nombre
-          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/OutOfBounds --output=$GITHUB_WORKSPACE/export_final --force --export --variant=windows-amd64
+          # Quitamos el variant y dejamos que exporte el paquete completo
+          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/OutOfBounds --output=$GITHUB_WORKSPACE/export_final --force --export
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
