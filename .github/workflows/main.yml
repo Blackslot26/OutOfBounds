@@ -1,21 +1,18 @@
-name: Java CI
-on:
-  push:
-    branches: [ main ]
+name: Build Processing Sketch
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-    - name: Build with Maven
-      run: mvn clean package
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: programa-compilado
-        path: target/*.jar
+      - uses: actions/checkout@v4
+      - name: Install Processing
+        run: |
+          wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-x64.tgz
+          tar -xzf processing-4.3-linux-x64.tgz
+      - name: Build Sketch
+        run: ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE --output=$GITHUB_WORKSPACE/build --build
+      - name: Upload Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: Out-Of-Bounds
+          path: build/
