@@ -1,18 +1,44 @@
-name: Build Processing Sketch
-on: [push]
+name: Build Processing Project
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Processing
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install Processing 4.3
         run: |
           wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-x64.tgz
-          tar -xzf processing-4.3-linux-x64.tgz
-      - name: Build Sketch
-        run: ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build --build
-      - name: Upload Result
+          tar -xvzf processing-4.3-linux-x64.tgz
+
+      - name: Install Libraries
+        run: |
+          mkdir -p libraries
+          wget -O video.zip https://github.com/processing/processing-video/releases/download/v2.2.3/video.zip
+          unzip video.zip -d libraries/
+          wget -O sound.zip https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip
+          unzip sound.zip -d libraries/
+
+      - name: Compile Sketch
+        run: |
+          ./processing-4.3/processing-java --sketchbook=$GITHUB_WORKSPACE --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build --build
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Out-Of-Bounds
-          path: ${{ github.workspace }}/build
+          name: OutOfBounds-Compiled
+          path: build/
