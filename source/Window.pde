@@ -192,7 +192,10 @@ class Window extends PApplet {
       }
       for (Door Door : Door) {
         Door.doorDraw(windowX, windowY);
+        if(onlyinthisWindow){
         Door.nextLevel();
+        }
+        
       }
 
       for (Virus virus : Virus) {

@@ -1,4 +1,4 @@
-class Estados {
+class Estados { //<>//
   float estados = 1;
   boolean nextLevel = false;
   int respawnPointX;
@@ -137,8 +137,8 @@ class Estados {
 
     if (estados == 1.1) {
       changed = false;
-      println(WindowArray.get(0).windowWidth);
-      println(WindowArray.get(0).windowHeight);
+      //println(WindowArray.get(0).windowWidth);
+      //println(WindowArray.get(0).windowHeight);
       if (WindowArray.get(0).windowWidth > 450) {
         WindowArray.get(0).windowWidth -= 5;
         changed = true;
@@ -161,18 +161,20 @@ class Estados {
         WindowArray.get(1).windowX = displayWidth/2 + displayWidth/4 - WindowArray.get(1).windowWidth/2;
         WindowArray.get(1).windowY = displayHeight/2-WindowArray.get(1).windowHeight/2;
       }
-      if (WindowArray.get(0).windowWidth < 450 && WindowArray.get(0).windowHeight < 450 && WindowArray.get(1).windowWidth < 450 && WindowArray.get(1).windowHeight < 450) {
-        WindowArray.get(0).windowWidth = 450;
-        WindowArray.get(0).windowHeight = 450;
-        WindowArray.get(1).windowWidth = 450;
-        WindowArray.get(1).windowHeight = 450;
-        WindowArray.get(0).windowX = displayWidth/2 - displayWidth/4 - WindowArray.get(0).windowWidth/2;
-        //WindowArray.get(0).windowY = displayHeight/2-450/2;
-        WindowArray.get(1).windowX = displayWidth/2 + displayWidth/4 - WindowArray.get(1).windowWidth/2;
-        //WindowArray.get(1).windowY = displayHeight/2-450/2;
+      if (WindowArray.get(0).windowWidth <= 460 && WindowArray.get(0).windowHeight <= 460 && WindowArray.get(1).windowWidth <= 460 && WindowArray.get(1).windowHeight <= 460) {
 
+        
+        for (Window w : WindowArray) {
+          w.windowWidth = 450;
+          w.windowHeight = 450;
+        }
 
-        estados = 1.2;
+        WindowArray.get(0).windowX = displayWidth/2 - displayWidth/4 - 450/2;
+        WindowArray.get(0).windowY = displayHeight/2 - 450/2;
+        WindowArray.get(1).windowX = displayWidth/2 + displayWidth/4 - 450/2;
+        WindowArray.get(1).windowY = displayHeight/2 - 450/2;
+                                // SE SUPONE QUE ESTE BLOQUE DE CODIGO ES DE LA ANIMACION INICIAL DEL NIVEL 1. PERO CULPA DE LAS VENTANAS DE MIERDA DE WINDOWS ES POSIBLE QUE BUGUEE TODO EL CAMBIO DE NIVEL.
+        estados = 1.2;        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
       }
     }
 
@@ -238,10 +240,11 @@ class Estados {
         gravity.lastinWindow = -1;
         antigravity.lastinWindow = -1;
         estados = 2;
+        println("NIVEL 2 CARGADO CORRECTAMENTE");
       }
       nextLevel = false;
     }
-
+    /**/
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     if (estados == 2) { //setup
@@ -332,12 +335,12 @@ class Estados {
       WindowArray.add(new Window("", 650, 650, int(displayWidth/2-325), displayHeight/2-350, 1, 3));  // area principal
       WindowArray.add(new Window("", 300, 200, displayWidth/2+325, displayHeight/2-350, 2, 3)); // area llave
       WindowArray.add(new Window("", 300, 200, displayWidth/2-625, displayHeight/2+100, 3, 3)); // area puerta
-      playerposX = int(displayWidth*0.1);
+      playerposX = int(displayWidth/2-400);
       playerposY = int(displayHeight/2+200);
       for (Window window : WindowArray) {
         window.BackgroundArray.add(new Background(window, windows[bGlitch], -10, -15, displayWidth, displayHeight));
-        window.Key.add(new Key(window, int(displayWidth*0.9), displayHeight/2-250));
-        window.Door.add(new Door(window, int(displayWidth*0.1), displayHeight/2+240, false));
+        window.Key.add(new Key(window, int(displayWidth/2+400), displayHeight/2-250));
+        window.Door.add(new Door(window, int(displayWidth/2-400), displayHeight/2+240, false));
         window.PlatArray.add(new Platform(window, int(displayWidth/2-220), displayHeight/2+230, 60, 50));  //plat1
         window.PlatArray.add(new Platform(window, int(displayWidth/2-120), displayHeight/2+160, 30, 15));  //plat2
         window.PlatArray.add(new Platform(window, int(displayWidth/2+50), displayHeight/2+175, 120, 50));  //plat3
@@ -434,8 +437,8 @@ class Estados {
       WindowArray.add(new Window("", 300, 400, displayWidth/2-150, displayHeight/2-200, 3, 4));
       for (Window window : WindowArray) {
         window.BackgroundArray.add(new Background(window, lvl2, -10, -15, displayWidth, displayHeight));
-        window.Key.add(new Key(window, int(displayWidth*0.9), displayHeight/2+100));
-        window.Door.add(new Door(window, int(displayWidth*0.1), displayHeight/2+100, false));
+        window.Key.add(new Key(window, int(displayWidth/2+500), displayHeight/2+100));
+        window.Door.add(new Door(window, int(displayWidth/2-500), displayHeight/2+100, false));
         window.PlatArray.add(new Platform(window, int(displayWidth/2-350), displayHeight/2+100, 60, 30));
         window.PlatArray.add(new Platform(window, int(displayWidth/2-200), displayHeight/2+50, 60, 30));
         window.PlatArray.add(new Platform(window, int(displayWidth/2-50), displayHeight/2, 60, 30));
@@ -443,8 +446,8 @@ class Estados {
         window.PlatArray.add(new Platform(window, int(displayWidth/2+35), displayHeight/2+100, 60, 30));
         window.PlatArray.add(new Platform(window, int(displayWidth/2+185), displayHeight/2+100, 60, 30));
         window.PlatArray.add(new Platform(window, int(displayWidth/2+335), displayHeight/2, 60, 30));
-        window.PlatArray.add(new Platform(window, int(displayWidth-320), displayHeight/2+80, 15, 190));
-        window.PlatArray.add(new Platform(window, int(displayWidth-250), displayHeight/2+80, 60, 30));
+        window.PlatArray.add(new Platform(window, int(displayWidth/2+370), displayHeight/2+80, 15, 190));
+        window.PlatArray.add(new Platform(window, int(displayWidth/2+430), displayHeight/2+80, 60, 30));
         window.Virus.add(new Virus(window, displayWidth/2-10, displayHeight/2+260, displayWidth, 200));
 
 
@@ -505,10 +508,14 @@ class Estados {
 
       for (Window window : WindowArray) {
         window.BackgroundArray.add(new Background(window, lvl3, -10, -15, displayWidth, displayHeight));
-        window.Door.add(new Door(window, 50, int((displayHeight-66)*0.25)-25, true));
-        window.PlatArray.add(new Platform(window, int(displayWidth*0.10), int((displayHeight-66)*0.90), 60, 20));
-        window.PlatArray.add(new Platform(window, int(displayWidth*0.60), int((displayHeight-66)*0.65), 60, 20));
-        window.PlatArray.add(new Platform(window, (displayWidth-int(displayHeight*0.25)), int((displayHeight-66)*0.40), 60, 20));
+        window.Door.add(new Door(window, displayWidth/2-800, displayHeight/2-350, true));
+        window.PlatArray.add(new Platform(window, int(displayWidth/2-600), displayHeight/2+400, 60, 20));
+        window.PlatArray.add(new Platform(window, int(displayWidth/2-650), displayHeight/2+300, 60, 20));
+        window.PlatArray.add(new Platform(window, int(displayWidth/2+100), displayHeight/2+150, 60, 20));
+        window.PlatArray.add(new Platform(window, int(displayWidth/2+150), displayHeight/2+50, 60, 20));
+        window.PlatArray.add(new Platform(window, displayWidth/2+650, displayHeight/2-100, 60, 20));
+        window.PlatArray.add(new Platform(window, displayWidth/2+700, displayHeight/2-200, 60, 20));
+        
       }
 
 

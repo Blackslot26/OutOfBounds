@@ -1,0 +1,7 @@
+# Processing temporales
+bin/
+out/
+application.*/
+java/
+lib/
+*.class

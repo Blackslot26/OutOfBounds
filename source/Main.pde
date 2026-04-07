@@ -19,7 +19,7 @@ import processing.sound.*;
 ArrayList<Window> WindowArray = new ArrayList<Window>();
 Gravity gravity = new Gravity();
 AntiGravity antigravity = new AntiGravity();
-Estados estados = new Estados();
+Estados estados = new Estados(); //<>//
 AnimacionInicio animacionStart = new AnimacionInicio();
 int playerposX, playerposY;
 float velocidadY = 1;
@@ -242,9 +242,9 @@ void draw() {
   //  //println(velocidadY);
   //  //println("==========================");
   //}
-  println(credtime);
-  println(estados.estados);
-  println(newT);
+  //println(credtime);
+  //println(estados.estados);
+ // println(newT);
 }
 
 void playerMove() {

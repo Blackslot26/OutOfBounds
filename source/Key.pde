@@ -23,7 +23,14 @@ class Key {
     papplet.image(Key[kframe], keyX-windowX, keyY-windowY, 30, 30);
   }
 
-  void gotKey() {
-    if (playerposX+playerSize/2 > keyX-10/2 && playerposX-playerSize/2 < keyX+10/2 && playerposY+playerSize/2 > keyY-20/2 && playerposY-playerSize/2 < keyY+20/2) hasKey = true;
+void gotKey() {
+  int keySize = 30; 
+  boolean colX = playerposX + playerSize/2 > keyX - keySize/2 && playerposX - playerSize/2 < keyX + keySize/2;
+  boolean colY = playerposY + playerSize/2 > keyY - keySize/2 && playerposY - playerSize/2 < keyY + keySize/2;
+  
+  if (colX && colY) {
+    hasKey = true;
+    println("GOT KEY");
   }
+}
 }
