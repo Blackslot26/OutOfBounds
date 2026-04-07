@@ -1,4 +1,4 @@
-name: Build Processing Project
+name: Build Processing Project (Windows Native)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -20,43 +20,39 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install System Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb libxrender1 libxtst6 libxi6
-
       - name: Install Processing 4.3
+        shell: pwsh
         run: |
-          wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-x64.tgz
-          tar -xvzf processing-4.3-linux-x64.tgz
+          Invoke-WebRequest -Uri https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-windows-x64.zip -OutFile processing.zip
+          Expand-Archive -Path processing.zip -DestinationPath .
+          # El ejecutable queda en ./processing-4.3/processing-java.exe
 
-      - name: Install Processing Libraries
+      - name: Install Libraries
+        shell: pwsh
         run: |
-          mkdir -p ~/sketchbook/libraries
-          # Descargar Librería de Video
-          wget -O video.zip https://github.com/processing/processing-video/releases/download/latest/video.zip
-          unzip video.zip -d ~/sketchbook/libraries/
-          # Descargar Librería de Sonido
-          wget -O sound.zip https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip
-          unzip sound.zip -d ~/sketchbook/libraries/
+          $libPath = "$HOME\Documents\Processing\libraries"
+          if (!(Test-Path $libPath)) { New-Item -ItemType Directory -Path $libPath -Force }
+          
+          # Video Library
+          Invoke-WebRequest -Uri https://github.com/processing/processing-video/releases/download/latest/video.zip -OutFile video.zip
+          Expand-Archive -Path video.zip -DestinationPath $libPath
+          
+          # Sound Library
+          Invoke-WebRequest -Uri https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip -OutFile sound.zip
+          Expand-Archive -Path sound.zip -DestinationPath $libPath
 
-      - name: Export Application
+      - name: Export Windows App
+        shell: pwsh
         run: |
-          # Renombramos para evitar el conflicto de nombres 'source'
-          mv source OutOfBounds
-          mv OutOfBounds/source.pde OutOfBounds/OutOfBounds.pde
+          # Renombramos para evitar el conflicto 'source'
+          Rename-Item -Path "source" -NewName "OutOfBounds"
+          Rename-Item -Path "OutOfBounds\source.pde" -NewName "OutOfBounds.pde"
           
-          # Creamos una carpeta de salida limpia
-          mkdir -p $GITHUB_WORKSPACE/output_folder
-          
-          # Ejecutamos la exportación con entorno gráfico virtual
-          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/OutOfBounds --output=$GITHUB_WORKSPACE/output_folder --force --export --variant=windows-amd64
-          
-          # Listamos los archivos para confirmar la estructura en los logs
-          ls -R $GITHUB_WORKSPACE/output_folder
+          # Ejecutamos la exportación nativa
+          & "./processing-4.3/processing-java.exe" --sketch="$env:GITHUB_WORKSPACE\OutOfBounds" --output="$env:GITHUB_WORKSPACE\out" --force --export --variant=windows-amd64
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: OutOfBounds-Windows-App
-          path: output_folder/
+          path: out\windows-amd64\
