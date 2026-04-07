@@ -35,10 +35,10 @@ jobs:
 
       - name: Compile Sketch
         run: |
-          ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build --build
+          ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/out --export --variant=windows-amd64
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: OutOfBounds-Build
-          path: build/
+          name: OutOfBounds-App
+          path: out/
