@@ -39,6 +39,9 @@ This project was made for an assignment in first year and only God knows how it 
 
 ## FAQ
 
+#### __¿How to play?__
+- Use the keys ```W```, ```A```, ```S``` and ```D``` to move. Alternate the player mode with ```T``` and ```Y``` (the player mode can only be toggled in some levels). 
+
 #### __Is the game finished?__
 
 - NO. The game is nowere near to be finished and 40% of the code is not really implemented.

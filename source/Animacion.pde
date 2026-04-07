@@ -1,5 +1,5 @@
 class AnimacionInicio {
-  ErrorWindows[] errorWindows = new ErrorWindows[15];
+  ErrorWindows[] errorWindows = new ErrorWindows[25];
   float delay = errorWindows.length*100;
   int estado = 1;
   int ventana = 0;
