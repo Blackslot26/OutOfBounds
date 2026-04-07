@@ -28,7 +28,7 @@ jobs:
       - name: Install Libraries
         run: |
           mkdir -p libraries
-          wget -O video.zip https://github.com/processing/processing-video/releases/download/v2.2.3/video.zip
+          wget -O video.zip https://github.com/processing/processing-video/releases/download/latest/video.zip
           unzip video.zip -d libraries/
           wget -O sound.zip https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip
           unzip sound.zip -d libraries/
