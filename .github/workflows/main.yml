@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -27,24 +29,24 @@ jobs:
 
       - name: Install Libraries
         run: |
-          # Crear la carpeta donde Processing busca por defecto en Linux
           mkdir -p ~/sketchbook/libraries
-          
-          # Descargar Video con el link solicitado
           wget -O video.zip https://github.com/processing/processing-video/releases/download/latest/video.zip
           unzip video.zip -d ~/sketchbook/libraries/
-          
-          # Descargar Sound
           wget -O sound.zip https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip
           unzip sound.zip -d ~/sketchbook/libraries/
 
       - name: Compile Sketch
         run: |
-          # Ejecución sin el parámetro --sketchbook
           ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build --build
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Zip Build
+        run: zip -r build-nightly.zip build/
+
+      - name: Deploy to Builds Branch
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          name: OutOfBounds-Build
-          path: build/
+          branch: builds
+          folder: .
+          target-folder: nightly
+          clean: false
+          single-commit: true
