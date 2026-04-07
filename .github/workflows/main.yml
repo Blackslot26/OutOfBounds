@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout code
@@ -39,14 +37,8 @@ jobs:
         run: |
           ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/build --build
 
-      - name: Zip Build
-        run: zip -r build-nightly.zip build/
-
-      - name: Deploy to Builds Branch
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
-          branch: builds
-          folder: .
-          target-folder: nightly
-          clean: false
-          single-commit: true
+          name: OutOfBounds-Build
+          path: build/
