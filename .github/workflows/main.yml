@@ -33,12 +33,15 @@ jobs:
           wget -O sound.zip https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip
           unzip sound.zip -d ~/sketchbook/libraries/
 
-      - name: Compile Sketch
+      - name: Export Application
         run: |
-          ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/out --export --variant=windows-amd64
+          # Eliminamos la carpeta out por seguridad antes de empezar
+          rm -rf $GITHUB_WORKSPACE/out
+          # Agregamos --force para que Processing gestione la creación
+          ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/source --output=$GITHUB_WORKSPACE/out --force --export --variant=windows-amd64
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: OutOfBounds-App
+          name: OutOfBounds-Windows-App
           path: out/
