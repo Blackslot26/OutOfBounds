@@ -3,6 +3,8 @@ name: Build Processing Project
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -18,7 +20,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb libxrender1 libxtst6 libxi6
@@ -28,25 +30,33 @@ jobs:
           wget https://github.com/processing/processing4/releases/download/processing-1293-4.3/processing-4.3-linux-x64.tgz
           tar -xvzf processing-4.3-linux-x64.tgz
 
-      - name: Install Libraries
+      - name: Install Processing Libraries
         run: |
           mkdir -p ~/sketchbook/libraries
+          # Descargar Librería de Video
           wget -O video.zip https://github.com/processing/processing-video/releases/download/latest/video.zip
           unzip video.zip -d ~/sketchbook/libraries/
+          # Descargar Librería de Sonido
           wget -O sound.zip https://github.com/processing/processing-sound/releases/download/v2.4.0/sound.zip
           unzip sound.zip -d ~/sketchbook/libraries/
 
-      - name: Export Windows App
+      - name: Export Application
         run: |
-          # Evitamos conflictos de nombres renombrando a la carpeta final
+          # Renombramos para evitar el conflicto de nombres 'source'
           mv source OutOfBounds
           mv OutOfBounds/source.pde OutOfBounds/OutOfBounds.pde
-          mkdir -p $GITHUB_WORKSPACE/dist
-          # Exportamos específicamente para windows
-          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/OutOfBounds --output=$GITHUB_WORKSPACE/dist --force --export --variant=windows-amd64
+          
+          # Creamos una carpeta de salida limpia
+          mkdir -p $GITHUB_WORKSPACE/output_folder
+          
+          # Ejecutamos la exportación con entorno gráfico virtual
+          xvfb-run ./processing-4.3/processing-java --sketch=$GITHUB_WORKSPACE/OutOfBounds --output=$GITHUB_WORKSPACE/output_folder --force --export --variant=windows-amd64
+          
+          # Listamos los archivos para confirmar la estructura en los logs
+          ls -R $GITHUB_WORKSPACE/output_folder
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: OutOfBounds-Game
-          path: dist/windows-amd64/
+          name: OutOfBounds-Windows-App
+          path: output_folder/
