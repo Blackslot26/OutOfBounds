@@ -24,7 +24,7 @@ This project was made for an assignment in first year and only God knows how it 
 ## Run Locally (At your own risk)
 
 ### Download compiled game
-- [Download OutOfBounds Latest version](https://nightly.link/Blackslot26/OutOfBounds/workflows/main/main/OutOfBounds-Windows-App.zip)
+- [Download OutOfBounds Latest version](https://nightly.link/Blackslot26/OutOfBounds/workflows/main/main/OutOfBounds-Windows-App.zip) (WARNING: For some reason this compiled version might not work on your computer when opening the menu. If thats the case just download the source and compile it yourselsf using processing).
 
 ### Download source
 1- **Download Processing:** Ensure you have [Processing 4+](https://processing.org/download) installed
